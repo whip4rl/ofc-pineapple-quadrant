@@ -82,8 +82,8 @@
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
             gap: 10px;
-            height: calc(100vh - 80px);
-            min-height: 500px;
+            height: calc(100vh - 200px);
+            min-height: 400px;
         }
 
         .quadrant {
@@ -342,30 +342,6 @@
             padding: 10px;
         }
 
-        /* Stats bar at bottom of hand quadrant */
-        .stats-bar {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 12px;
-            padding-top: 10px;
-            border-top: 1px solid #414868;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-label {
-            font-size: 9px;
-            color: #565f89;
-            text-transform: uppercase;
-        }
-
-        .stat-value {
-            font-size: 14px;
-            font-weight: bold;
-            color: #7dcfff;
-        }
 
         /* Modal */
         .modal-overlay {
@@ -503,6 +479,102 @@
             50% { box-shadow: 0 0 25px rgba(187, 154, 247, 0.8); }
         }
 
+        /* Bottom 3-Panel Section */
+        .bottom-panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .panel {
+            background: #24283b;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .panel-title {
+            font-size: 11px;
+            color: #bb9af7;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #414868;
+        }
+
+        /* Stats Panel */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 6px;
+            background: #1a1b26;
+            border-radius: 5px;
+        }
+
+        .stat-label {
+            font-size: 9px;
+            color: #565f89;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #7dcfff;
+        }
+
+        /* Probability Panel */
+        .prob-item {
+            font-size: 11px;
+            padding: 3px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prob-label {
+            color: #a9b1d6;
+        }
+
+        .prob-value {
+            color: #9ece6a;
+        }
+
+        .prob-value.low {
+            color: #f7768e;
+        }
+
+        /* Royalty Reference */
+        .royalty-table {
+            font-size: 10px;
+        }
+
+        .royalty-row-title {
+            color: #7dcfff;
+            margin-top: 6px;
+            margin-bottom: 3px;
+            font-weight: bold;
+        }
+
+        .royalty-row-title:first-child {
+            margin-top: 0;
+        }
+
+        .royalty-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1px 0;
+            color: #565f89;
+        }
+
+        .royalty-item .points {
+            color: #e0af68;
+        }
+
         /* Responsive - stack on narrow screens */
         @media (max-width: 700px) {
             .quadrant-grid {
@@ -513,6 +585,10 @@
 
             .quadrant {
                 min-height: 200px;
+            }
+
+            .bottom-panels {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -572,7 +648,15 @@
                 <div class="hand-instruction" id="handInstruction">Click a card, then click a slot to place it</div>
                 <div class="hand-cards" id="handCards"></div>
                 <button class="discard-btn danger" id="discardBtn" style="display: none;">Discard Remaining Card</button>
-                <div class="stats-bar">
+            </div>
+        </div>
+
+        <!-- Bottom 3-Panel Section -->
+        <div class="bottom-panels">
+            <!-- Session Stats -->
+            <div class="panel">
+                <div class="panel-title">Session Stats</div>
+                <div class="stats-grid">
                     <div class="stat-item">
                         <div class="stat-label">Games</div>
                         <div class="stat-value" id="statGames">0</div>
@@ -586,9 +670,38 @@
                         <div class="stat-value" id="statBest">0</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-label">FL</div>
+                        <div class="stat-label">FL Runs</div>
                         <div class="stat-value" id="statFantasy">0</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Draw Probabilities -->
+            <div class="panel">
+                <div class="panel-title">Draw Probabilities</div>
+                <div id="probContent">
+                    <div class="prob-item">
+                        <span class="prob-label">No active draws</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Royalty Reference -->
+            <div class="panel">
+                <div class="panel-title">Royalty Reference</div>
+                <div class="royalty-table">
+                    <div class="royalty-row-title">Front (3 cards)</div>
+                    <div class="royalty-item"><span>66-JJ</span><span class="points">1-6</span></div>
+                    <div class="royalty-item"><span>QQ/KK/AA</span><span class="points">7/8/9</span></div>
+                    <div class="royalty-item"><span>Trips 22-AA</span><span class="points">10-22</span></div>
+
+                    <div class="royalty-row-title">Middle (5 cards)</div>
+                    <div class="royalty-item"><span>Trips/Str/Flush</span><span class="points">2/4/8</span></div>
+                    <div class="royalty-item"><span>FH/Quads/SF</span><span class="points">12/20/30</span></div>
+
+                    <div class="royalty-row-title">Back (5 cards)</div>
+                    <div class="royalty-item"><span>Str/Flush/FH</span><span class="points">2/4/6</span></div>
+                    <div class="royalty-item"><span>Quads/SF</span><span class="points">10/15</span></div>
                 </div>
             </div>
         </div>
@@ -1071,12 +1184,68 @@
 
         function hideModal() { document.getElementById('modalOverlay').classList.remove('show'); }
 
+        function calculateProbabilities(board, deadCards) {
+            const probs = [];
+            const remaining = createDeck().filter(c => !deadCards.some(d => cardKey(d) === cardKey(c)));
+
+            // Check back row draws
+            if (board.back.length >= 3 && board.back.length < 5) {
+                const suitCounts = {};
+                board.back.forEach(c => suitCounts[c.suit] = (suitCounts[c.suit] || 0) + 1);
+                for (const [suit, count] of Object.entries(suitCounts)) {
+                    if (count >= 3) {
+                        const outs = remaining.filter(c => c.suit === suit).length;
+                        const cardsNeeded = 5 - board.back.length;
+                        if (outs > 0) {
+                            const prob = Math.min(100, Math.round(outs / remaining.length * 100 * (cardsNeeded === 1 ? 1 : 0.5)));
+                            probs.push({ label: `Back ${SUIT_SYMBOLS[suit]} flush`, value: prob, outs });
+                        }
+                    }
+                }
+            }
+
+            // Check middle row draws
+            if (board.middle.length >= 3 && board.middle.length < 5) {
+                const suitCounts = {};
+                board.middle.forEach(c => suitCounts[c.suit] = (suitCounts[c.suit] || 0) + 1);
+                for (const [suit, count] of Object.entries(suitCounts)) {
+                    if (count >= 3) {
+                        const outs = remaining.filter(c => c.suit === suit).length;
+                        if (outs > 0) {
+                            const prob = Math.min(100, Math.round(outs / remaining.length * 100 * 0.5));
+                            probs.push({ label: `Mid ${SUIT_SYMBOLS[suit]} flush`, value: prob, outs });
+                        }
+                    }
+                }
+            }
+
+            return probs;
+        }
+
+        function renderProbabilities() {
+            const content = document.getElementById('probContent');
+            const probs = calculateProbabilities(gameState.player, gameState.deadCards);
+
+            if (probs.length === 0) {
+                content.innerHTML = '<div class="prob-item"><span class="prob-label">No active draws</span></div>';
+                return;
+            }
+
+            content.innerHTML = probs.map(p => `
+                <div class="prob-item">
+                    <span class="prob-label">${p.label} (${p.outs} outs)</span>
+                    <span class="prob-value ${p.value < 20 ? 'low' : ''}">${p.value}%</span>
+                </div>
+            `).join('');
+        }
+
         function render() {
             renderBoard('player', gameState.player);
             renderBoard('ai1', gameState.ai1);
             renderBoard('ai2', gameState.ai2);
             renderHand();
             renderStats();
+            renderProbabilities();
         }
 
         function renderBoard(type, board) {
